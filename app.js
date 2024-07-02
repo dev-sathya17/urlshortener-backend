@@ -13,11 +13,22 @@ const morgan = require("morgan");
 // Importing the cookie parser library
 const cookieParser = require("cookie-parser");
 
+// Importing CORS
+const cors = require("cors");
+
 // Creating the express app
 const app = express();
 
 // parse the cookies of the request
 app.use(cookieParser());
+
+// enabling CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Adding a middleware to parse request body as json
 app.use(express.json());

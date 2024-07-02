@@ -56,7 +56,11 @@ const userController = {
       });
 
       // Sending a success response
-      res.status(201).json({ message: "User registered successfully", user });
+      res.status(201).json({
+        message:
+          "Your account has been created successfully. Check your email to activate your account.",
+        user,
+      });
     } catch (error) {
       // Sending an error response
       res.status(500).json({ message: error.message });

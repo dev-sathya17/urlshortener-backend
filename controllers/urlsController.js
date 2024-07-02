@@ -47,6 +47,40 @@ const urlsController = {
       return res.status(500).send({ message: error.message });
     }
   },
+  // API for getting count of urls per date.
+  getUrlCount: async (req, res) => {
+    const { month } = req.body;
+
+    if (!month) {
+      return res.status(400).json({ message: "Month is required" });
+    }
+
+    const startDate = new Date(month);
+    const endDate = new Date(startDate);
+    endDate.setMonth(startDate.getMonth() + 1);
+
+    try {
+      const counts = await Url.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: startDate, $lt: endDate },
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: 1 }, // Sort by date in ascending order
+        },
+      ]);
+      res.status(200).json(counts);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = urlsController;

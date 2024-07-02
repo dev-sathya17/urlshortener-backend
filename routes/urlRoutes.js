@@ -16,5 +16,8 @@ urlRouter.post("/shorten", auth.authenticate, urlsController.shortenUrl);
 // Route to view all created urls
 urlRouter.get("/", auth.authenticate, urlsController.viewUserUrls);
 
+// Route to view count of urls per date
+urlRouter.get("/count", auth.authenticate, urlsController.getUrlCount);
+
 // Exporting the router
 module.exports = urlRouter;
