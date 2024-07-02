@@ -10,5 +10,8 @@ const userRouter = express.Router();
 // Route to register a user
 userRouter.post("/", userController.register);
 
+// Route for user login
+userRouter.post("/login", userController.login);
+
 // Exporting the router
 module.exports = userRouter;
