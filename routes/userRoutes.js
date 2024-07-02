@@ -17,5 +17,8 @@ userRouter.post("/login", userController.login);
 // Route for user logout
 userRouter.get("/logout", auth.authenticate, userController.logout);
 
+// Route to activate user account
+userRouter.get("/activate/:id", userController.activateUser);
+
 // Exporting the router
 module.exports = userRouter;

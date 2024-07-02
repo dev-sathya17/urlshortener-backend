@@ -10,6 +10,11 @@ const jwt = require("jsonwebtoken");
 // Importing the secret key
 const { SECRET_KEY } = require("../utils/config");
 
+// Importing the email transporter
+const transporter = require("../utils/transporter");
+
+const { EMAIL_ID } = require("../utils/config");
+
 // Creating a user controller
 const userController = {
   // Function to register a user
@@ -38,6 +43,14 @@ const userController = {
       // Saving the user to the database
       await user.save();
 
+      // Sending email
+      transporter.sendMail({
+        from: EMAIL_ID,
+        to: email,
+        subject: "Activate your account",
+        text: `Click here to reset your password: localhost:3000/users/activate/${user._id}`,
+      });
+
       // Sending a success response
       res.status(201).json({ message: "User registered successfully", user });
     } catch (error) {
@@ -58,6 +71,11 @@ const userController = {
       // if the user does not exist, return an error response
       if (!user) {
         return res.status(404).send({ message: "User not found" });
+      }
+
+      // if the user is not active, return an error response
+      if (!user.isActive) {
+        return res.status(403).send({ message: "User account is not active" });
       }
 
       // if the user exists check the password
@@ -95,6 +113,30 @@ const userController = {
 
       // sending a success response
       res.status(200).send({ message: "Logged out successfully" });
+    } catch (error) {
+      // Sending an error response
+      res.status(500).send({ message: error.message });
+    }
+  },
+
+  // Activate user
+  activateUser: async (req, res) => {
+    try {
+      // Fetching the id from url params
+      const { id } = req.params;
+
+      // Checking if the id is valid
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+
+      // Updating the user status to active
+      user.isActive = true;
+      await user.save();
+
+      // Sending a success response
+      res.status(200).send({ message: "User activated successfully" });
     } catch (error) {
       // Sending an error response
       res.status(500).send({ message: error.message });
