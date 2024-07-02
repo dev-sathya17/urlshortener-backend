@@ -35,6 +35,18 @@ const urlsController = {
       return res.status(500).send({ message: error.message });
     }
   },
+  // API to view all urls created by the user.
+  viewUserUrls: async (req, res) => {
+    try {
+      // Fetching all URLs created by the user from the database
+      const urls = await Url.find({ user: req.userId });
+      // Sending a success response
+      return res.status(200).send({ urls });
+    } catch (error) {
+      // Sending an error response
+      return res.status(500).send({ message: error.message });
+    }
+  },
 };
 
 module.exports = urlsController;

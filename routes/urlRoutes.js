@@ -13,5 +13,8 @@ const urlRouter = express.Router();
 // Route to shorten a url
 urlRouter.post("/shorten", auth.authenticate, urlsController.shortenUrl);
 
+// Route to view all created urls
+urlRouter.get("/", auth.authenticate, urlsController.viewUserUrls);
+
 // Exporting the router
 module.exports = urlRouter;
