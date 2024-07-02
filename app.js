@@ -1,8 +1,11 @@
 // Importing the express library
 const express = require("express");
 
-// Importing the router
+// Importing the user router
 const userRouter = require("./routes/userRoutes");
+
+// Importing the urls router
+const urlsRouter = require("./routes/urlRoutes");
 
 // Importing the morgan library to log requests
 const morgan = require("morgan");
@@ -24,6 +27,7 @@ app.use(morgan("dev"));
 
 // Creating routes
 app.use("/users", userRouter);
+app.use("/urls", urlsRouter);
 
 // Exporting the express app.
 module.exports = app;
