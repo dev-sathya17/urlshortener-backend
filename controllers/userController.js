@@ -1,3 +1,6 @@
+// Importing bcrypt library to encrypt the password
+const bcrypt = require("bcrypt");
+
 // Importing the user model
 const User = require("../models/user");
 
@@ -15,12 +18,15 @@ const userController = {
         return res.json({ message: "User with this email already exists" });
       }
 
+      // Encrypting the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       // Creating a new user
       const user = new User({
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
       });
 
       // Saving the user to the database
