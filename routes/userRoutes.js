@@ -29,5 +29,8 @@ userRouter.get("/verify/:authString", userController.authVerify);
 // Route for resetting the password
 userRouter.post("/reset", userController.resetPassword);
 
+// Route to get user profile
+userRouter.get("/profile", auth.authenticate, userController.getUserProfile);
+
 // Exporting the router
 module.exports = userRouter;

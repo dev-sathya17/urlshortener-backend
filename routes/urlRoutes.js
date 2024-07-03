@@ -19,5 +19,13 @@ urlRouter.get("/", auth.authenticate, urlsController.viewUserUrls);
 // Route to view count of urls per date
 urlRouter.get("/count", auth.authenticate, urlsController.getUrlCount);
 
+// Route to get today's url count
+urlRouter.get(
+  "/todayCount",
+  auth.authenticate,
+  urlsController.getCurrentDayCount
+);
+
+urlRouter.get("/:identifier", auth.authenticate, urlsController.redirectUrl);
 // Exporting the router
 module.exports = urlRouter;

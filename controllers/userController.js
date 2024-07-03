@@ -177,7 +177,7 @@ const userController = {
         from: EMAIL_ID,
         to: email,
         subject: "Password Reset",
-        text: `Click here to reset your password: localhost:3000/users/verify/${authString}`,
+        text: `Click here to reset your password: localhost:3000/verify/${authString}`,
       });
 
       // Sending a success response
@@ -235,6 +235,22 @@ const userController = {
 
       // Sending a success response
       res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+      // Sending an error response
+      res.status(500).json({ message: error.message });
+    }
+  },
+  // API to get User Profile
+  getUserProfile: async (req, res) => {
+    try {
+      // Fetching the user from the database
+      const user = await User.findById(req.userId);
+      // Checking if the user exists
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      // Sending a success response
+      res.status(200).json({ user });
     } catch (error) {
       // Sending an error response
       res.status(500).json({ message: error.message });

@@ -18,7 +18,7 @@ const urlsController = {
         return res.status(409).send({ message: "Url already shortened" });
       }
       // Generating a shorted url
-      const identifier = `localhost:3000/${generateIdentifier()}`;
+      const identifier = `localhost:3000/urls/${generateIdentifier()}`;
 
       // Creating a new URL object
       const shortenedUrl = new Url({ url, identifier, user: req.userId });
@@ -49,7 +49,7 @@ const urlsController = {
   },
   // API for getting count of urls per date.
   getUrlCount: async (req, res) => {
-    const { month } = req.body;
+    const { month } = req.query;
 
     if (!month) {
       return res.status(400).json({ message: "Month is required" });
@@ -79,6 +79,45 @@ const urlsController = {
       res.status(200).json(counts);
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  },
+  // API to get url count for current day
+  getCurrentDayCount: async (req, res) => {
+    try {
+      const today = new Date();
+      const day = today.getDate();
+      const month = today.getMonth();
+      const year = today.getFullYear();
+
+      const count = await Url.countDocuments({
+        createdAt: {
+          $gte: new Date(year, month, day),
+          $lt: new Date(year, month, day + 1),
+        },
+      });
+
+      res.status(200).json({ count });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+  //API to redirect the url
+  redirectUrl: async (req, res) => {
+    try {
+      const identifier = req.params.identifier;
+      const identifierPattern = new RegExp(`^.*${identifier}$`, "i");
+
+      const url = await Url.findOne({
+        identifier: { $regex: identifierPattern },
+      });
+      if (!url) {
+        return res.status(404).send({ message: "Url not found" });
+      }
+
+      return res.redirect(url.url);
+    } catch (error) {
+      return res.status(500).send({ message: error.message });
     }
   },
 };
