@@ -18,7 +18,7 @@ const urlsController = {
         return res.status(409).send({ message: "Url already shortened" });
       }
       // Generating a shorted url
-      const identifier = `localhost:3000/urls/${generateIdentifier()}`;
+      const identifier = `https://url-short-ener-app.netlify.app/urls/${generateIdentifier()}`;
 
       // Creating a new URL object
       const shortenedUrl = new Url({ url, identifier, user: req.userId });

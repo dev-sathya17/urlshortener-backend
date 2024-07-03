@@ -52,7 +52,7 @@ const userController = {
         from: EMAIL_ID,
         to: email,
         subject: "Activate your account",
-        text: `Click here to reset your password: localhost:3000/users/activate/${user._id}`,
+        text: `Click here to reset your password: https://url-short-ener-app.netlify.app/users/activate/${user._id}`,
       });
 
       // Sending a success response
@@ -177,7 +177,7 @@ const userController = {
         from: EMAIL_ID,
         to: email,
         subject: "Password Reset",
-        text: `Click here to reset your password: localhost:3000/verify/${authString}`,
+        text: `Click here to reset your password: https://url-short-ener-app.netlify.app/verify/${authString}`,
       });
 
       // Sending a success response
